@@ -20,7 +20,7 @@ module.exports = {
       loader: 'babel-loader',
       options: {
         cacheDirectory: true,
-        cacheCompression: nodeEnv === 'production',
+        cacheCompression: false,
         compact: nodeEnv === 'production'
       }
     }
