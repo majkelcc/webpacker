@@ -35,6 +35,7 @@ class Webpacker::Compiler
 
   # Returns true if all the compiled packs are up to date with the underlying asset files.
   def fresh?
+    logger.info "#fresh? watched_files_digest: #{watched_files_digest} == last_compilation_digest: #{last_compilation_digest}"
     watched_files_digest == last_compilation_digest
   end
 
@@ -53,9 +54,12 @@ class Webpacker::Compiler
 
     def watched_files_digest
       warn "Webpacker::Compiler.watched_paths has been deprecated. Set additional_paths in webpacker.yml instead." unless watched_paths.empty?
+      logger.info "default_watched_paths: #{default_watched_paths}"
 
       files = Dir[*default_watched_paths, *watched_paths].reject { |f| File.directory?(f) }
+      logger.info "watched files: #{files}"
       file_ids = files.sort.map { |f| "#{File.basename(f)}/#{Digest::SHA1.file(f).hexdigest}" }
+      logger.info "file ids: #{file_ids}"
       Digest::SHA1.hexdigest(file_ids.join("/"))
     end
 
